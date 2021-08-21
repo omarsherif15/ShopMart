@@ -1,6 +1,6 @@
 class CategoriesModel
 {
-  bool ?status;
+   bool? status;
   late CategoriesDataModel ?data;
 
   CategoriesModel.fromJson(Map<String, dynamic> json)
@@ -31,10 +31,13 @@ class DataModel
   String? name;
   String ?image;
 
+
+
   DataModel.fromJson(Map<String, dynamic> json)
   {
     id = json['id'];
     name = json['name'];
     image = json['image'];
+
   }
 }

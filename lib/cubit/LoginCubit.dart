@@ -2,46 +2,49 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopmart/cubit/states.dart';
-import 'package:shopmart/models/loginModel.dart';
+import 'package:shopmart/models/profileModels/userModel.dart';
 import 'package:shopmart/remoteNetwork/dioHelper.dart';
 import 'package:shopmart/remoteNetwork/endPoints.dart';
+import 'package:shopmart/shared/constants.dart';
 class LoginCubit extends Cubit<ShopStates> {
   LoginCubit() : super(InitialState());
 
   static LoginCubit get(context) => BlocProvider.of(context);
-  LoginModel? userModel;
-  void loginUser({
+
+  UserModel? loginModel;
+  void signIn({
     required String email,
     required String password,
   }) {
     emit(LoginLoadingState());
     DioHelper.postData(
         url: LOGIN,
+        token: token,
         data:
         {
           'email': '$email',
           'password': '$password',
         }).then((value) {
-          userModel = LoginModel.fromJson(value.data);
-          emit(LoginSuccessState(userModel!));
+          loginModel = UserModel.fromJson(value.data);
+          emit(LoginSuccessState(loginModel!));
     }).catchError((error) {
       print(error.toString());
       emit(LoginErrorState());
     });
   }
- 
+
+  bool showPassword = false;
+  IconData suffixIcon = Icons.visibility;
+  void changeSuffixIcon(context){
+    showPassword =! showPassword;
+    if(showPassword)
+      suffixIcon = Icons.visibility_off;
+    else
+      suffixIcon = Icons.visibility;
+    emit(ChangeSuffixIconState());
+  }
+
     
-    
-    bool isShown = false;
-    IconData suffixIcon = Icons.visibility;
-    void changeSuffixIcon() {
-      isShown =! isShown;
-      if(isShown)
-        suffixIcon = Icons.visibility_off;
-      else
-        suffixIcon = Icons.visibility;
-      emit(ChangeSuffixIconState());
-    }
 }
 
 

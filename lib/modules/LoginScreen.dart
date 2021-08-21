@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopmart/cubit/LoginCubit.dart';
+import 'package:shopmart/cubit/shopCubit.dart';
 import 'package:shopmart/cubit/states.dart';
 import 'package:shopmart/modules/registerScreen.dart';
 import 'package:shopmart/Layouts/shopLayout.dart';
@@ -12,7 +13,7 @@ import 'package:shopmart/shared/constants.dart';
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 bool hidePassword  = true;
-var formKey = GlobalKey<FormState>();
+var loginFormKey = GlobalKey<FormState>();
 class LoginScreen extends StatelessWidget {
 
   get obscureText => null;
@@ -25,16 +26,28 @@ class LoginScreen extends StatelessWidget {
         {
           if(state is LoginSuccessState)
           {
-            if (state.userModel.status) {
-              CacheHelper.saveData(key: 'token', value: state.userModel.data!.token).then((value){
+            if (state.loginUserModel.status) {
+              CacheHelper.saveData(
+                  key: 'token',
+                  value: state.loginUserModel.data?.token
+              ).then((value) {
+                token = state.loginUserModel.data?.token;
                 navigateAndKill(context, ShopLayout());
+                ShopCubit.get(context).currentIndex = 0;
+                ShopCubit.get(context).getHomeData();
+                ShopCubit.get(context).getProfileData();
+                ShopCubit.get(context).getFavoriteData();
+                ShopCubit.get(context).getCartData();
+                ShopCubit.get(context).getAddresses();
               });
             }
-            else showToast(state.userModel.message);
+            else showToast(state.loginUserModel.message);
           }
         },
         builder: (context,state)
         {
+
+
           LoginCubit cubit = LoginCubit.get(context);
           return Scaffold(
             body: Center(
@@ -43,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child:
                   Form(
-                    key: formKey,
+                    key: loginFormKey,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -59,6 +72,7 @@ class LoginScreen extends StatelessWidget {
                             height: 30,
                           ),
                           defaultFormField(
+                              context: context,
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
                               label: 'Email Address',
@@ -70,13 +84,14 @@ class LoginScreen extends StatelessWidget {
                               }
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 40,
                           ),
                           defaultFormField(
+                              context: context,
                               controller: passwordController,
                               label: 'Password',
                               prefix: Icons.lock,
-                              isPassword: !cubit.isShown ? true : false,
+                              isPassword: !LoginCubit.get(context).showPassword ? true : false,
                               validate: (value)
                               {
                                 if(value!.isEmpty)
@@ -84,16 +99,16 @@ class LoginScreen extends StatelessWidget {
                               },
                               onSubmit: (value)
                               {
-                                if (formKey.currentState!.validate()) {
-                                  LoginCubit.get(context).loginUser(
+                                if (loginFormKey.currentState!.validate()) {
+                                  LoginCubit.get(context).signIn(
                                       email: emailController.text,
                                       password: passwordController.text);
                                 }
                               },
-                              suffix: cubit.suffixIcon,
+                              suffix: LoginCubit.get(context).suffixIcon,
                               suffixPressed: ()
                               {
-                                cubit.changeSuffixIcon();
+                                LoginCubit.get(context).changeSuffixIcon(context);
                               }
                           ),
                           Row(
@@ -118,11 +133,12 @@ class LoginScreen extends StatelessWidget {
                               :defaultButton(
                             text: 'LOGIN',
                             onTap: () {
-                              if (formKey.currentState!.validate()) {
-                                LoginCubit.get(context).loginUser(
+                              if (loginFormKey.currentState!.validate()) {
+                                LoginCubit.get(context).signIn(
                                     email: emailController.text,
-                                    password: passwordController.text
+                                    password: passwordController.text,
                                 );
+                                token = CacheHelper.getData('token');
                               }
                             },
                           )

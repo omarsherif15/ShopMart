@@ -6,8 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_conditional_rendering/conditional.dart';
 import 'package:shopmart/cubit/shopCubit.dart';
 import 'package:shopmart/cubit/states.dart';
-import 'package:shopmart/models/categoriesModel.dart';
-import 'package:shopmart/models/homeModel.dart';
+import 'package:shopmart/models/categoriesModels/categoriesModel.dart';
+import 'package:shopmart/models/homeModels/homeModel.dart';
+import 'package:shopmart/modules/productScreen.dart';
 import 'package:shopmart/shared/constants.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -65,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsetsDirectional.only(start: 10,top: 10),
                 physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                itemBuilder:(context,index) => categoriesAvatar(categoriesModel!.data!.data[index]) ,
+                itemBuilder:(context,index) => categoriesAvatar(categoriesModel!.data!.data[index],context) ,
                 separatorBuilder:(context,index) => SizedBox(width: 10,) ,
                 itemCount:categoriesModel!.data!.data.length,
               ),
@@ -166,30 +167,36 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget categoriesAvatar(DataModel model) {
-    return Column(
-      children:
-      [
-        Stack(
-          children: [
-            CircleAvatar(
-              backgroundColor: defaultColor,
-              radius:36 ,
-            ),
-            CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 35,
-              child: Image(
-                image: NetworkImage('${model.image}'),
-                width: 50,
-                height: 50,
+  Widget categoriesAvatar(DataModel model,context) {
+    return InkWell(
+      onTap: (){
+        ShopCubit.get(context).getCategoriesDetailData(model.id);
+        navigateTo(context, CategoryProductsScreen(model.name));
+      },
+      child: Column(
+        children:
+        [
+          Stack(
+            children: [
+              CircleAvatar(
+                backgroundColor: defaultColor,
+                radius:36 ,
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: 10,),
-        Text('${model.name}'),
-      ],
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 35,
+                child: Image(
+                  image: NetworkImage('${model.image}'),
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Text('${model.name}'),
+        ],
+      ),
     );
   }
 }

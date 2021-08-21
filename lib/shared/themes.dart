@@ -37,6 +37,8 @@ ThemeData lightMode () => ThemeData(
     backgroundColor: Colors.white,
     selectedItemColor: defaultColor,
     unselectedItemColor: Colors.grey,
+    showUnselectedLabels: true,
+    type: BottomNavigationBarType.fixed
   ));
 ThemeData darkMode () =>   ThemeData(
   appBarTheme: AppBarTheme(

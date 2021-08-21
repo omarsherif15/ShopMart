@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shopmart/shared/constants.dart';
 
 class DioHelper
 {
@@ -17,7 +18,8 @@ class DioHelper
     required String url,
     Map<String,dynamic>? query,
     String lang = 'en',
-    String ?token
+    String ?token,
+    Map<String,dynamic> ?data,
   })async
   {
     dio.options.headers =
@@ -35,7 +37,7 @@ class DioHelper
   static Future<Response> postData ({
     required String url,
     Map<String,dynamic> ?query,
-    required Map<String,dynamic> data,
+    Map<String,dynamic> ?data,
     String lang = 'en',
     String ?token
   })async
@@ -52,5 +54,41 @@ class DioHelper
         data: data,
 
     );
+  }
+
+  static Future<Response> putData ({
+    required String url,
+    Map<String,dynamic> ?query,
+    Map<String,dynamic> ?data,
+    String lang = 'en',
+    String ?token
+  })async
+  {
+    dio.options.headers =
+    {
+      'lang':'$lang',
+      'Content-Type':'application/json',
+      'Authorization' : '$token'
+    };
+    return await dio.put(
+      url,
+      queryParameters: query,
+      data: data,
+    );
+  }
+
+  static Future<Response> deleteData ({
+    required String url,
+    String lang = 'en',
+    String ?token
+  })async
+  {
+    dio.options.headers =
+    {
+      'lang':'$lang',
+      'Content-Type':'application/json',
+      'Authorization' : '$token'
+    };
+    return await dio.delete(url);
   }
 }

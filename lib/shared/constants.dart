@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:shopmart/Layouts/shopLayout.dart';
 import 'package:shopmart/cubit/shopCubit.dart';
+import 'package:shopmart/cubit/states.dart';
 import 'package:shopmart/modules/LoginScreen.dart';
 import 'package:shopmart/remoteNetwork/cacheHelper.dart';
 
@@ -20,7 +23,7 @@ void showToast(msg){
       fontSize: 16.0
   );}
 
-void navigateTo(context,Widget widget) {
+void navigateTo(BuildContext context,Widget widget) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
 }
 
@@ -36,21 +39,53 @@ void navigateAndKill (context,widget) {
   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => widget), (route) => false);
 }
 
-Widget myDivider() => Padding(
-  padding: const EdgeInsetsDirectional.only(start: 20),
-  child: Container(
-    color: Colors.grey[300],
-    height: 1,
-    width: double.infinity,
-  ),
+Widget myDivider() => Container(
+  color: Colors.grey[300],
+  height: 1,
+  width: double.infinity,
 );
 
 void signOut (context) {
   CacheHelper.removeData('token').then((value){
     navigateAndKill(context, LoginScreen());
+    ShopCubit.get(context).currentIndex = 0;
   });
 }
 
+bool isEdit = false;
+String editText = 'Edit';
+void editPressed({
+  required context,
+  required email,
+  required name,
+  required phone,
+})
+{
+  isEdit =! isEdit;
+  if(isEdit) {
+    editText = 'Save';
+    ShopCubit.get(context).emit(EditPressedState());
+  } else {
+    editText = 'Edit';
+    ShopCubit.get(context).updateProfileData(
+        email: email,
+        name: name,
+        phone: phone
+    );
+  }
+
+}
+String getDateTomorrow ()
+{
+DateTime dateTime =  DateTime.now().add(Duration(days: 1));
+String date =  DateFormat.yMMMd().format(dateTime);
+return date;
+}
+
+
 Color defaultColor  = Colors.red;
 
- String? token = '';
+String? token = '';
+
+int cartLength = 0;
+

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopmart/cubit/shopCubit.dart';
 import 'package:shopmart/cubit/states.dart';
+import 'package:shopmart/modules/LoginScreen.dart';
 import 'package:shopmart/modules/SearchScreen.dart';
+import 'package:shopmart/remoteNetwork/cacheHelper.dart';
 import 'package:shopmart/shared/constants.dart';
 
 
@@ -13,7 +15,9 @@ class ShopLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit,ShopStates>(
-      listener:(context,state) {} ,
+      listener:(context,state) {
+
+      } ,
       builder: (context,state) {
         ShopCubit cubit =  ShopCubit.get(context);
         return  Scaffold(
@@ -27,18 +31,22 @@ class ShopLayout extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                  onPressed: ()
-                  {
-                    navigateTo(context, SearchScreen());
+                  onPressed: () {
+                    navigateTo(context, SearchScreen(ShopCubit.get(context)));
                   },
                   icon: Icon(Icons.search)),
+
+
             ],
           ),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
             items:cubit.navBar,
             currentIndex: cubit.currentIndex,
-            onTap: (index) => cubit.changeBottomNav(index),
+            onTap: (index) {
+              return cubit.changeBottomNav(index);
+
+            },
 
           ),
         );

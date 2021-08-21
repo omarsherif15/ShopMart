@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 
 Widget defaultFormField({
-  required TextEditingController controller,
-  required dynamic label,
-  required IconData prefix,
+  required context,
+  TextEditingController? controller,
+  dynamic label,
+  IconData ? prefix,
+  String ? initialValue,
   TextInputType ?keyboardType,
   Function(String)? onSubmit,
   onChange,
   onTap,
   required String? Function(String?) validate,
   bool isPassword = false,
+  bool enabled = true,
   IconData ?suffix,
   suffixPressed,
 }) =>
@@ -18,29 +21,39 @@ Widget defaultFormField({
       controller: controller,
       keyboardType: keyboardType,
       obscureText: isPassword,
+      textAlign: TextAlign.start,
       onFieldSubmitted: onSubmit,
+      enabled: enabled,
       onChanged: onChange,
       onTap: onTap,
       validator: validate,
+      textCapitalization: TextCapitalization.words,
+      textAlignVertical: TextAlignVertical.center,
+      style:Theme.of(context).textTheme.bodyText1,
+      initialValue:initialValue ,
+      //textCapitalization: TextCapitalization.words,
+
       decoration: InputDecoration(
-        labelText: label,
+      hintText: label,
+        border:UnderlineInputBorder(),
         prefixIcon: Icon(prefix,),
         suffixIcon: suffix != null ? IconButton(onPressed: suffixPressed, icon: Icon(suffix)) : null,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20))
+
       ),
     );
 
 Widget defaultButton({
   required VoidCallback onTap,
   required String text,
-  double? width = 150,
+  double? width = 200,
 
 }) => Container(
   height: 40,
   width: width,
   decoration: BoxDecoration(
     color: Colors.red,
-    borderRadius: BorderRadius.circular(30),),
+    borderRadius: BorderRadius.circular(30)
+  ),
   child: MaterialButton(
     onPressed: onTap,
     child: Text(
@@ -52,5 +65,6 @@ Widget defaultButton({
     ),
   ),
 );
+
 
 

@@ -1,7 +1,7 @@
 class HomeModel
 {
-  bool? status;
-  HomeDataModel? data;
+    late bool status;
+    HomeDataModel? data;
 
   HomeModel.fromJson(Map<String, dynamic> json)
   {
@@ -13,7 +13,7 @@ class HomeModel
 class HomeDataModel
 {
   List<BannerModel> banners = [];
-  List<ProductModel> products = [];
+  List<HomeProductModel> products = [];
 
   HomeDataModel.fromJson(Map<String, dynamic> json)
   {
@@ -24,7 +24,7 @@ class HomeDataModel
 
     json['products'].forEach((element)
     {
-      products.add(ProductModel.fromJson(element));
+      products.add(HomeProductModel.fromJson(element));
     });
   }
 }
@@ -41,7 +41,7 @@ class BannerModel
   }
 }
 
-class ProductModel
+class HomeProductModel
 {
   int? id;
   dynamic price;
@@ -49,10 +49,10 @@ class ProductModel
   dynamic discount;
   String ?image;
   String ?name;
-  bool ?inFavorites;
-  bool ?inCart;
+  dynamic inFavorites;
+  dynamic inCart;
 
-  ProductModel.fromJson(Map<String, dynamic> json)
+  HomeProductModel.fromJson(Map<String, dynamic> json)
   {
     id = json['id'];
     price = json['price'];

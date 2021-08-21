@@ -1,4 +1,7 @@
-import 'package:shopmart/models/loginModel.dart';
+import 'package:shopmart/models/addressModels/addAddressModel.dart';
+import 'package:shopmart/models/cartModels/addCartModel.dart';
+import 'package:shopmart/models/favoritesModels/changeFavoritesModel.dart';
+import 'package:shopmart/models/profileModels/userModel.dart';
 
 abstract class ShopStates {}
 
@@ -63,6 +66,99 @@ class SearchSuccessState extends ShopStates{}
 class SearchErrorState extends ShopStates{}
 ///End of Search State
 
+///ChangeFavorites State
+class ChangeFavoritesLoadingState extends ShopStates{}
+class ChangeFavoritesSuccessState extends ShopStates {
+  final ChangeToFavoritesModel model;
+  ChangeFavoritesSuccessState(this.model);
+}
+class ChangeFavoritesManuallySuccessState extends ShopStates{}
+class ChangeFavoritesErrorState extends ShopStates{}
+///End of ChangeFavorites State
+
+
+
+///Favorites State
+class FavoritesLoadingState extends ShopStates{}
+class FavoritesSuccessState extends ShopStates {}
+class FavoritesErrorState extends ShopStates{}
+///End of Favorites State
+
+
+///Favorites State
+class AddCartLoadingState extends ShopStates{}
+class AddCartSuccessState extends ShopStates {
+  final AddCartModel addCartModel;
+
+  AddCartSuccessState(this.addCartModel);
+}
+class AddCartErrorState extends ShopStates{}
+///End of Favorites State
+
+
+///Cart State
+class CartLoadingState extends ShopStates{}
+class CartSuccessState extends ShopStates {}
+class CartErrorState extends ShopStates{}
+///End of Cart State
+
+///Cart State
+class UpdateCartLoadingState extends ShopStates{}
+class UpdateCartSuccessState extends ShopStates {}
+class UpdateCartErrorState extends ShopStates{}
+class MinusCartItemState extends ShopStates{}
+class PlusCartItemState extends ShopStates{}
+
+///End of Cart State
+
+///Add Address State
+class AddAddressLoadingState extends ShopStates{}
+class AddAddressSuccessState extends ShopStates {
+  final AddAddressModel addAddressModel;
+  AddAddressSuccessState(this.addAddressModel);
+}
+class AddAddressErrorState extends ShopStates{}
+///End of Add Address State
+
+///Add Update Address State
+class UpdateAddressLoadingState extends ShopStates{}
+class UpdateAddressSuccessState extends ShopStates {}
+class UpdateAddressErrorState extends ShopStates{}
+///End of Add Address State
+
+///Add Delete Address State
+class DeleteAddressLoadingState extends ShopStates{}
+class DeleteAddressSuccessState extends ShopStates {}
+class DeleteAddressErrorState extends ShopStates{}
+///End of delete Address State
+
+///Addresses State
+class AddressesLoadingState extends ShopStates{}
+class AddressesSuccessState extends ShopStates {}
+class AddressesErrorState extends ShopStates{}
+///End of Addresses State
+
+///FAQs State
+class FAQsLoadingState extends ShopStates{}
+class FAQsSuccessState extends ShopStates {}
+class FAQsErrorState extends ShopStates{}
+///End of FAQs State
+
+///Profile State
+class ProfileLoadingState extends ShopStates{}
+class ProfileSuccessState extends ShopStates {}
+class ProfileErrorState extends ShopStates{}
+///End of Profile State
+
+
+///Update Profile State
+class UpdateProfileLoadingState extends ShopStates{}
+class UpdateProfileSuccessState extends ShopStates {
+  final UserModel updateUserModel;
+  UpdateProfileSuccessState(this.updateUserModel);
+}
+class UpdateProfileErrorState extends ShopStates{}
+///End of Update Profile State
 
 
 

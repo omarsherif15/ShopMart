@@ -35,15 +35,32 @@ class ShopCubit extends Cubit<ShopStates>
 
   static ShopCubit get(context) => BlocProvider.of(context);
 
+
+  Map <dynamic ,dynamic> favorites = {};
+  Map <dynamic ,dynamic> cart = {};
+
+
   HomeModel? homeModel;
   void getHomeData() {
     emit(HomeLoadingState());
     DioHelper.getData(
         url: HOME,
-        token: token
+      token: token
     ).then((value){
     homeModel = HomeModel.fromJson(value.data);
-    printFullText(homeModel!.status.toString());
+    print('Home '+homeModel!.status.toString());
+    homeModel!.data!.products.forEach((element)
+    {
+      favorites.addAll({
+        element.id : element.inFavorites
+      });
+    });
+    homeModel!.data!.products.forEach((element)
+    {
+      cart.addAll({
+        element.id : element.inCart
+      });
+    });
       emit(HomeSuccessState());
     }).catchError((error){
       emit(HomeErrorState());
@@ -160,7 +177,229 @@ class ShopCubit extends Cubit<ShopStates>
   }
 
 
+  ChangeToFavoritesModel ?changeToFavoritesModel;
+  void changeToFavorite(int? productID) {
+    favorites[productID] = !favorites[productID];
+    emit(ChangeFavoritesManuallySuccessState());
 
+    emit(ChangeFavoritesLoadingState());
+    DioHelper.postData(
+      url: FAVORITES,
+      token: token,
+      data: {
+        'product_id': productID
+      }
+    ).then((value){
+      changeToFavoritesModel = ChangeToFavoritesModel.fromjson(value.data);
+      print(changeToFavoritesModel!.status);
+      if(changeToFavoritesModel!.status == false)
+        favorites[productID] = !favorites[productID];
+      else {
+        getFavoriteData();
+      }
+      emit(ChangeFavoritesSuccessState(changeToFavoritesModel!));
+    }).catchError((error){
+      favorites[productID] = !favorites[productID];
+      emit(ChangeFavoritesErrorState());
+      print(error.toString());
+    });
+  }
+
+/// CART API
+  late AddCartModel  addCartModel;
+  void addToCart(int? productID) {
+    emit(AddCartLoadingState());
+    DioHelper.postData(
+        url: CART,
+        token: token,
+        data: {
+          'product_id': productID
+        }
+    ).then((value){
+      addCartModel = AddCartModel.fromJson(value.data);
+      print('AddCart '+ addCartModel.status.toString());
+      if(addCartModel.status) {
+        getCartData();
+        getHomeData();
+      }
+      else
+        showToast(addCartModel.message);
+      emit(AddCartSuccessState(addCartModel));
+    }).catchError((error){
+      emit(AddCartErrorState());
+      print(error.toString());
+    });
+  }
+
+  late UpdateCartModel  updateCartModel;
+  void updateCartData(int? cartId,int? quantity) {
+    emit(UpdateCartLoadingState());
+    DioHelper.putData(
+      url: 'carts/$cartId',
+      data: {
+        'quantity':'$quantity',
+      },
+      token: token,
+    ).then((value){
+      updateCartModel = UpdateCartModel.fromJson(value.data);
+      if(updateCartModel.status)
+        getCartData();
+      else
+        showToast(updateCartModel.message);
+      print('Update Cart '+ updateCartModel.status.toString());
+      emit(UpdateCartSuccessState());
+    }).catchError((error){
+      emit(UpdateCartErrorState());
+      print(error.toString());
+    });
+  }
+
+  late CartModel  cartModel;
+  void getCartData() {
+    emit(CartLoadingState());
+    DioHelper.getData(
+        url: CART,
+        token: token,
+    ).then((value){
+      cartModel = CartModel.fromJson(value.data);
+      cartLength = cartModel.data!.cartItems.length;
+      print('Get Cart '+ cartModel.status.toString());
+      emit(CartSuccessState());
+    }).catchError((error){
+      emit(CartErrorState());
+      print(error.toString());
+    });
+  }
+  /// END OF CART API
+
+  /// Address API
+  AddAddressModel? addAddressModel;
+  void addAddress({
+    required String name,
+    required String city,
+    required String region,
+    required String details,
+    required String notes,
+    double latitude = 30.0616863,
+    double longitude = 31.3260088,
+  }){
+    emit(AddAddressLoadingState());
+    DioHelper.postData(
+        url: 'addresses',
+        token: token,
+        data: {
+          'name': name,
+          'city': city,
+          'region': region,
+          'details': details,
+          'notes': notes,
+          'latitude': latitude,
+          'longitude': longitude,
+        }
+    ).then((value){
+      addAddressModel = AddAddressModel.fromJson(value.data);
+      print('Add Address '+ addAddressModel!.status.toString());
+      if(addAddressModel!.status)
+        getAddresses();
+      else
+        showToast(addAddressModel!.message);
+      emit(AddAddressSuccessState(addAddressModel!));
+    }).catchError((error){
+      emit(AddAddressErrorState());
+      print(error.toString());
+    });
+  }
+
+  late AddressModel  addressModel;
+  void getAddresses() {
+    emit(AddressesLoadingState());
+    DioHelper.getData(
+      url: 'addresses',
+      token: token,
+    ).then((value){
+      addressModel = AddressModel.fromJson(value.data);
+      print('Get Addresses '+ addressModel.status.toString());
+      emit(AddressesSuccessState());
+    }).catchError((error){
+      emit(AddressesErrorState());
+      print(error.toString());
+    });
+  }
+
+  UpdateAddressModel ? updateAddressModel;
+  void updateAddress({
+    required int ?addressId,
+    required String name,
+    required String city,
+    required String region,
+    required String details,
+    required String notes,
+    double latitude = 30.0616863,
+    double longitude = 31.3260088,
+  }){
+    emit(UpdateAddressLoadingState());
+    DioHelper.postData(
+        url: 'addresses/$addressId',
+        token: token,
+        data: {
+          'name': name,
+          'city': city,
+          'region': region,
+          'details': details,
+          'notes': notes,
+          'latitude': latitude,
+          'longitude': longitude,
+        }
+    ).then((value){
+      updateAddressModel = UpdateAddressModel.fromJson(value.data);
+      print('Update Address '+ addAddressModel!.status.toString());
+      if(updateAddressModel!.status)
+        getAddresses();
+      emit(UpdateAddressSuccessState());
+    }).catchError((error){
+      emit(UpdateAddressErrorState());
+      print(error.toString());
+    });
+  }
+
+  UpdateAddressModel ? deleteAddressModel;
+  void deleteAddress({required addressId}){
+    emit(DeleteAddressLoadingState());
+    DioHelper.deleteData(
+        url: 'addresses/$addressId',
+        token: token,
+    ).then((value){
+      deleteAddressModel = UpdateAddressModel.fromJson(value.data);
+      print('delete Address '+ deleteAddressModel!.status.toString());
+      if(deleteAddressModel!.status)
+        getAddresses();
+      emit(DeleteAddressSuccessState());
+    }).catchError((error){
+      emit(DeleteAddressErrorState());
+      print(error.toString());
+    });
+  }
+  /// END OF ADDRESS API
+
+
+  late FAQsModel  faqsModel;
+  void getFAQsData() {
+    emit(FAQsLoadingState());
+    DioHelper.getData(
+      url: 'faqs',
+    ).then((value){
+      faqsModel = FAQsModel.fromJson(value.data);
+      print('Get FAQs '+ faqsModel.status.toString());
+      emit(FAQsSuccessState());
+    }).catchError((error){
+      emit(FAQsErrorState());
+      print(error.toString());
+    });
+  }
+
+  //static int cartLength = 0;
+  Icon favoriteIcon =Icon (Icons.favorite,color: Colors.red,);
+  Icon unFavoriteIcon =Icon (Icons.favorite_border_rounded);
 
   List<BottomNavigationBarItem> navBar =
   [

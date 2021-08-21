@@ -1,3 +1,4 @@
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ import 'package:shopmart/models/categoriesModels/categoriesModel.dart';
 import 'package:shopmart/models/homeModels/homeModel.dart';
 import 'package:shopmart/modules/productScreen.dart';
 import 'package:shopmart/shared/constants.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'categoryProductsScreen.dart';
 
 class HomeScreen extends StatelessWidget {
 
@@ -18,21 +20,30 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit,ShopStates>(
-      listener: (context,state){},
+      listener: (context,state)
+      {
+        if(state is ChangeFavoritesSuccessState)
+        {
+            if (state.model.status == false)
+              showToast(state.model.message);
+            else
+              showToast(state.model.message);
+      }
+    },
       builder: (context,state)
       {
         ShopCubit cubit = ShopCubit.get(context);
         return Conditional.single(
           context: context,
           conditionBuilder: (context) => cubit.homeModel != null ,
-          widgetBuilder:(context) => productBuilder(cubit.homeModel,cubit.categoriesModel),
+          widgetBuilder:(context) => productBuilder(cubit.homeModel,cubit.categoriesModel,context),
           fallbackBuilder:(context) => Center(child: CircularProgressIndicator(),),
         );
       }
     );
   }
 
-  Widget productBuilder (HomeModel? model,CategoriesModel? categoriesModel) {
+  Widget productBuilder (HomeModel? homeModel,CategoriesModel? categoriesModel,context) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Container(
@@ -41,7 +52,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CarouselSlider(
-              items:model!.data!.banners.map((e) => Image(
+              items:homeModel!.data!.banners.map((e) => Image(
                 image: NetworkImage('${e.image}'),fit: BoxFit.cover,width: double.infinity,)).toList(),
               options: CarouselOptions(
                 autoPlay: true,
@@ -82,8 +93,9 @@ class HomeScreen extends StatelessWidget {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 children:
-                List.generate(model.data!.products.length,
-                        (index) => productItemBuilder(model,index)),
+                List.generate(
+                    homeModel.data!.products.length,
+                        (index) => productItemBuilder(homeModel.data!.products[index],context)),
                 crossAxisSpacing: 2,
                 childAspectRatio: 0.6,
                 mainAxisSpacing: 2,
@@ -94,75 +106,90 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget productItemBuilder (HomeModel? model,index) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsetsDirectional.only(start: 8,bottom: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:
-        [
-          Stack(
-            alignment:AlignmentDirectional.bottomStart,
-              children:[
-            Image(image: NetworkImage('${model!.data!.products[index].image}'),height: 150,width: 150,),
-                if(model.data!.products[index].discount != 0 )
-                    Container(
-                       color: defaultColor,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Text('Discount',style: TextStyle(fontSize: 14,color: Colors.white),),
-                      )
-              )
-          ]),
-          separator(0,10),
-          Text('${model.data!.products[index].name}',maxLines: 3, overflow: TextOverflow.ellipsis,),
-          Spacer(),
-          Row(
-            children: [
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text('EGP',style: TextStyle(color: Colors.grey[800],fontSize: 12,),),
-                      Text('${model.data!.products[index].price}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                        ),),
-                    ],
-                  ),
-                  separator(0, 5),
-                  if(model.data!.products[index].discount != 0 )
+  Widget productItemBuilder (HomeProductModel model,context) {
+    return InkWell(
+      onTap: (){
+        ShopCubit.get(context).getProductData(model.id);
+        navigateTo(context, ProductScreen());
+      },
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsetsDirectional.only(start: 8,bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+          [
+            Stack(
+              alignment:AlignmentDirectional.bottomStart,
+                children:[
+              Image(image: NetworkImage('${model.image}'),height: 150,width: 150,),
+                  if(model.discount != 0 )
+                      Container(
+                         color: defaultColor,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text('Discount',style: TextStyle(fontSize: 14,color: Colors.white),),
+                        )
+                )
+            ]),
+            separator(0,10),
+            Text('${model.name}',maxLines: 3, overflow: TextOverflow.ellipsis,),
+            Spacer(),
+            Row(
+              children: [
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:
+                  [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('EGP',style: TextStyle(color: Colors.grey,fontSize: 10,decoration: TextDecoration.lineThrough,),),
-                        Text('${model.data!.products[index].oldPrice}',
+                        Text('EGP',style: TextStyle(color: Colors.grey[800],fontSize: 12,),),
+                        Text('${model.price}',
                           style: TextStyle(
-                            fontSize: 12,
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey),
-                        ),
-                        separator(7, 0),
-                        Text('${model.data!.products[index].discount}'+'% OFF',style: TextStyle(color: Colors.red,fontSize: 11),)
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                          ),),
                       ],
                     ),
-              ]
-              ),
-              Spacer(),
-              IconButton(
-                  onPressed: (){},
-                  icon: Icon(Icons.favorite_border_rounded,),
-                padding: EdgeInsets.all(0),
-                iconSize: 20,
-              ),
-            ],
-          )
-        ],
+                    separator(0, 5),
+                    if(model.discount != 0 )
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text('EGP',style: TextStyle(color: Colors.grey,fontSize: 10,decoration: TextDecoration.lineThrough,),),
+                          Text('${model.oldPrice}',
+                            style: TextStyle(
+                              fontSize: 12,
+                                decoration: TextDecoration.lineThrough,
+                                color: Colors.grey),
+                          ),
+                          separator(7, 0),
+                          Text('${model.discount}'+'% OFF',style: TextStyle(color: Colors.red,fontSize: 11),)
+                        ],
+                      ),
+                ]
+                ),
+                Spacer(),
+                IconButton(
+                    onPressed: ()
+                    {
+                      ShopCubit.get(context).changeToFavorite(model.id);
+                      print(model.id);
+                    },
+                    icon: Conditional.single(
+                      context: context,
+                      conditionBuilder:(context) => ShopCubit.get(context).favorites[model.id],
+                      widgetBuilder:(context) => ShopCubit.get(context).favoriteIcon,
+                      fallbackBuilder: (context) => ShopCubit.get(context).unFavoriteIcon,
+                    ),
+                  padding: EdgeInsets.all(0),
+                  iconSize: 20,
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

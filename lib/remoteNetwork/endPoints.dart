@@ -15,3 +15,13 @@ const CATEGORIES_DETAIL =  'products';
 const PRODUCT_DETAILS = 'products/1';
 
 const SEARCH = 'products/search';
+
+const FAVORITES = 'favorites';
+
+const CART = 'carts';
+
+
+
+
+
+

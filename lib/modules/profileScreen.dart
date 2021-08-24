@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopmart/cubit/shopCubit.dart';
 import 'package:shopmart/cubit/states.dart';
+import 'package:shopmart/modules/changePasswordScreen.dart';
 import 'package:shopmart/shared/component.dart';
 import 'package:shopmart/shared/constants.dart';
 
@@ -10,6 +11,7 @@ import 'SearchScreen.dart';
 class ProfileScreen extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit,ShopStates>(
@@ -36,15 +38,6 @@ class ProfileScreen extends StatelessWidget {
                 Text('ShopMart'),
               ],
             ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    navigateTo(context, SearchScreen(ShopCubit.get(context)));
-                  },
-                  icon: Icon(Icons.search)),
-
-
-            ],
           ),
           body: SingleChildScrollView(
             child: Container(
@@ -84,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           Row(
                             children: [
-                              Text('Personal Information',style: TextStyle(fontSize: 15),),
+                              Text('PERSONAL INFORMATION',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                               Spacer(),
                               TextButton(
                                   onPressed: ()
@@ -96,7 +89,13 @@ class ProfileScreen extends StatelessWidget {
                                         email: cubit.userModel!.data!.email
                                     );
                                   },
-                                  child: Text('$editText',style: TextStyle(color: Colors.grey),)
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.edit,color: Colors.grey,size: 15,),
+                                      SizedBox(width: 5,),
+                                      Text('$editText',style: TextStyle(color: Colors.grey),),
+                                    ],
+                                  )
                               ),
                             ],
                           ),
@@ -126,35 +125,24 @@ class ProfileScreen extends StatelessWidget {
                   Container(
                     color: Colors.white,
                     width: double.infinity,
-                    padding: EdgeInsets.all(10),
+
+                    padding: EdgeInsets.all(15),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text('Security Information',style: TextStyle(fontSize: 15),),
-                            Spacer(),
-                            TextButton(
-                                onPressed: (){},
-                                child: Text('Edit',style: TextStyle(color: Colors.grey),)
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15,),
-                        Text('Password',style: TextStyle(fontSize: 15),),
-                        defaultFormField(
-                            context: context,
-                            prefix: Icons.lock,
-                            initialValue: '123456789',
-                            isPassword: true,
-                            enabled: false,
-                            validate: (value){}
+                        Text('SECURITY INFORMATION',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                        SizedBox(height: 5,),
+                        OutlinedButton(
+                            onPressed: (){
+                              navigateTo(context,ChangePasswordScreen());
+                            },
+                            child: Text('Change Password')
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 15,),
-
+                  SizedBox(height:200)
                 ],
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import 'constants.dart';
 
@@ -42,7 +43,7 @@ ThemeData lightMode () => ThemeData(
   ));
 ThemeData darkMode () =>   ThemeData(
   appBarTheme: AppBarTheme(
-    backgroundColor: Colors.black54,
+    backgroundColor: HexColor('#202A44'),
     elevation: 0,
     actionsIconTheme: IconThemeData(
         color: Colors.white
@@ -55,11 +56,11 @@ ThemeData darkMode () =>   ThemeData(
     backwardsCompatibility: false,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
-      statusBarColor: Colors.black54,
+      statusBarColor: HexColor('#202A44'),
       statusBarIconBrightness: Brightness.light,
     ),),
   primarySwatch: Colors.red,
-  scaffoldBackgroundColor:Colors.black54,
+  scaffoldBackgroundColor:HexColor('#202A44'),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
     contentPadding: EdgeInsetsDirectional.only(top: 5,start: 30),
@@ -70,10 +71,12 @@ ThemeData darkMode () =>   ThemeData(
           fontWeight: FontWeight.w400,
           fontSize: 15)),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: Colors.black54,
+    backgroundColor: HexColor('#202A44'),
     selectedItemColor: defaultColor,
-    unselectedItemColor: Colors.grey,
+    unselectedItemColor: Colors.white,
+    type: BottomNavigationBarType.fixed
   ),
   iconTheme: IconThemeData(color: Colors.white),
   primaryIconTheme: IconThemeData(color: Colors.white),
+
 );

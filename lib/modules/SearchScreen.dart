@@ -37,6 +37,7 @@ class SearchScreen extends StatelessWidget {
                       child: TextFormField(
                         style: Theme.of(context).textTheme.bodyText1,
                         controller: searchController,
+                        textCapitalization: TextCapitalization.words,
                         keyboardType: TextInputType.text,
                         autofocus: true,
                         decoration: InputDecoration(

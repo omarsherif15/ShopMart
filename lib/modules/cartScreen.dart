@@ -107,7 +107,7 @@ class CartScreen extends StatelessWidget {
     counterController.text = '${model!.quantity}';
     return InkWell(
       onTap: (){
-        ShopCubit.get(context).getProductData(model.id);
+        ShopCubit.get(context).getProductData(model.product!.id);
         navigateTo(context, ProductScreen());
       },
       child: Container(

@@ -32,12 +32,18 @@ var signUpFormKey = GlobalKey<FormState>();
                       value: state.signUpUserModel.data?.token,
                   ).then((value) {
                     token = state.signUpUserModel.data?.token;
+                    name.clear();
+                    phone.clear();
+                    email.clear();
+                    password.clear();
+                    confirmPassword.clear();
                     navigateAndKill(context, ShopLayout());
                     ShopCubit.get(context).currentIndex = 0;
                     ShopCubit.get(context).getHomeData();
                     ShopCubit.get(context).getProfileData();
                     ShopCubit.get(context).getFavoriteData();
                     ShopCubit.get(context).getCartData();
+                    ShopCubit.get(context).getAddresses();
 
                   });
                 } else
@@ -153,7 +159,9 @@ var signUpFormKey = GlobalKey<FormState>();
                             }
                         ),
                         SizedBox(height: 50,),
-                        defaultButton(
+                        state is SignUpLoadingState ?
+                        Center(child: CircularProgressIndicator())
+                            :defaultButton(
                             onTap: ()
                             {
                               if(signUpFormKey.currentState!.validate())

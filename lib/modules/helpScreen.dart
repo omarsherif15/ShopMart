@@ -24,15 +24,6 @@ class FAQsScreen extends StatelessWidget {
                   Text('ShopMart'),
                 ],
               ),
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      navigateTo(context, SearchScreen(ShopCubit.get(context)));
-                    },
-                    icon: Icon(Icons.search)),
-
-
-              ],
             ),
             body:state is FAQsLoadingState? Center(child: CircularProgressIndicator(),):
               SingleChildScrollView(

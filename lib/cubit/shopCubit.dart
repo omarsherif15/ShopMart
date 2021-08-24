@@ -18,11 +18,14 @@ import 'package:shopmart/models/homeModels/productModel.dart';
 import 'package:shopmart/models/profileModels/faqsModels.dart';
 import 'package:shopmart/models/homeModels/homeModel.dart';
 import 'package:shopmart/models/cartModels/updateCartModel.dart';
+import 'package:shopmart/models/profileModels/logOutModel.dart';
 import 'package:shopmart/models/profileModels/userModel.dart';
 import 'package:shopmart/modules/CategoriesScreen.dart';
+import 'package:shopmart/modules/LoginScreen.dart';
 import 'package:shopmart/modules/cartScreen.dart';
 import 'package:shopmart/modules/homeScreen.dart';
 import 'package:shopmart/modules/myAccountScreen.dart';
+import 'package:shopmart/modules/profileScreen.dart';
 import 'package:shopmart/remoteNetwork/cacheHelper.dart';
 import 'package:shopmart/remoteNetwork/dioHelper.dart';
 import 'package:shopmart/remoteNetwork/endPoints.dart';
@@ -143,7 +146,7 @@ class ShopCubit extends Cubit<ShopStates>
       token: token,
     ).then((value){
       userModel = UserModel.fromJson(value.data);
-      print('Profile '+ favoritesModel!.status.toString());
+      print('Profile '+ userModel!.status.toString());
       print(userModel!.data!.token);
       emit(ProfileSuccessState());
     }).catchError((error){
@@ -168,10 +171,39 @@ class ShopCubit extends Cubit<ShopStates>
         }
     ).then((value){
       userModel = UserModel.fromJson(value.data);
-      print('Update Profile '+ favoritesModel!.status.toString());
+      print('Update Profile '+ userModel!.status.toString());
       emit(UpdateProfileSuccessState(userModel!));
     }).catchError((error){
       emit(UpdateProfileErrorState());
+      print(error.toString());
+    });
+  }
+
+  UserModel ?passwordModel;
+  void changePassword({
+    required context,
+    required String currentPass,
+    required String newPass
+  }) {
+    emit(ChangePassLoadingState());
+    DioHelper.postData(
+        url: 'change-password',
+        token: token,
+        data: {
+          'current_password':currentPass,
+          'new_password': newPass,
+        }
+    ).then((value){
+      passwordModel = UserModel.fromJson(value.data);
+      print('Change Password '+ passwordModel!.status.toString());
+      if(passwordModel!.status) {
+        showToast(passwordModel!.message);
+        pop(context);
+      } else
+        showToast(passwordModel!.message);
+      emit(ChangePassSuccessState(userModel!));
+    }).catchError((error){
+      emit(ChangePassErrorState());
       print(error.toString());
     });
   }
@@ -397,6 +429,7 @@ class ShopCubit extends Cubit<ShopStates>
     });
   }
 
+
   //static int cartLength = 0;
   Icon favoriteIcon =Icon (Icons.favorite,color: Colors.red,);
   Icon unFavoriteIcon =Icon (Icons.favorite_border_rounded);
@@ -493,5 +526,46 @@ bool inCart = false;
       return Container(height: 0,width: 0,);
 
   }
+
+  bool showCurrentPassword = false;
+  IconData currentPasswordIcon = Icons.visibility;
+  void changeCurrentPassIcon(context){
+    showCurrentPassword =! showCurrentPassword;
+    if(showCurrentPassword)
+      currentPasswordIcon = Icons.visibility_off;
+    else
+      currentPasswordIcon = Icons.visibility;
+    emit(ChangeSuffixIconState());
+  }
+
+  bool showNewPassword = false;
+  IconData newPasswordIcon = Icons.visibility;
+  void changeNewPassIcon(context){
+    showNewPassword =! showNewPassword;
+    if(showNewPassword)
+      newPasswordIcon = Icons.visibility_off;
+    else
+      newPasswordIcon = Icons.visibility;
+    emit(ChangeSuffixIconState());
+  }
+
+  // LogOutModel? logOutModel;
+  // void signOut(context){
+  //   emit(LogOutLoadingState());
+  //   DioHelper.postData(
+  //       url: 'logout',
+  //       token: token,
+  //      ).then((value) {
+  //     logOutModel = LogOutModel.fromJson(value.data);
+  //     if(logOutModel!.status)
+  //       navigateAndKill(context, LoginScreen());
+  //     else
+  //       showToast(logOutModel!.message);
+  //     emit(LogOutSuccessState(logOutModel!));
+  //   }).catchError((error) {
+  //     print(error.toString());
+  //     emit(LogOutErrorState());
+  //   });
+  // }
 
 }

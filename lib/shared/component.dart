@@ -45,16 +45,15 @@ Widget defaultFormField({
 Widget defaultButton({
   required VoidCallback onTap,
   required String text,
-  double? width = 200,
+  double? width = double.infinity,
 
 }) => Container(
   height: 40,
   width: width,
   decoration: BoxDecoration(
     color: Colors.red,
-    borderRadius: BorderRadius.circular(30)
   ),
-  child: MaterialButton(
+  child: ElevatedButton(
     onPressed: onTap,
     child: Text(
       '$text',

@@ -33,6 +33,8 @@ class LoginScreen extends StatelessWidget {
               ).then((value) {
                 token = state.loginUserModel.data?.token;
                 navigateAndKill(context, ShopLayout());
+                emailController.clear();
+                passwordController.clear();
                 ShopCubit.get(context).currentIndex = 0;
                 ShopCubit.get(context).getHomeData();
                 ShopCubit.get(context).getProfileData();
@@ -46,8 +48,6 @@ class LoginScreen extends StatelessWidget {
         },
         builder: (context,state)
         {
-
-
           LoginCubit cubit = LoginCubit.get(context);
           return Scaffold(
             body: Center(
@@ -62,15 +62,15 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children:
                         [
-                          Image(
-                            image: AssetImage('assets/images/ShopLogo.png',),
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
+                          Row(
+                            children: [
+                              Image(image: AssetImage('assets/images/ShopLogo.png'),width: 40, height: 40,),
+                              Text('ShopMart',style: TextStyle(fontSize: 25),),
+                            ]
                           ),
-                          SizedBox(
-                            height: 30,
-                          ),
+                          SizedBox(height: 30,),
+                          Text('Ahlan! Welcome back!',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+                          SizedBox(height: 30,),
                           defaultFormField(
                               context: context,
                               controller: emailController,
@@ -111,23 +111,18 @@ class LoginScreen extends StatelessWidget {
                                 LoginCubit.get(context).changeSuffixIcon(context);
                               }
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                  'Don\'t have an account?'
-                              ),
-                              TextButton(
-                                  onPressed: () {
-                                    navigateTo(context, RegisterScreen());
-                                  },
-                                  child: Text('Register Now')
-                              ),
-                            ],
+                          Container(
+                            width: double.infinity,
+                            alignment: AlignmentDirectional.centerStart,
+                            child: TextButton(
+                                onPressed: (){},
+                                child: Text('Forget Your Password ?',
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.5)),
+                                )
+                            ),
                           ),
-                          SizedBox(
-                            height: 25,
-                          ),
+                          SizedBox(height: 25,),
                           state is LoginLoadingState ?
                           Center(child: CircularProgressIndicator())
                               :defaultButton(
@@ -141,7 +136,21 @@ class LoginScreen extends StatelessWidget {
                                 token = CacheHelper.getData('token');
                               }
                             },
-                          )
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                  'Don\'t have an account?'
+                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    navigateTo(context, RegisterScreen());
+                                  },
+                                  child: Text('Register Now')
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

@@ -35,8 +35,6 @@ class ShopLayout extends StatelessWidget {
                     navigateTo(context, SearchScreen(ShopCubit.get(context)));
                   },
                   icon: Icon(Icons.search)),
-
-
             ],
           ),
           body: cubit.screens[cubit.currentIndex],

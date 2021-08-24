@@ -1,6 +1,7 @@
 import 'package:shopmart/models/addressModels/addAddressModel.dart';
 import 'package:shopmart/models/cartModels/addCartModel.dart';
 import 'package:shopmart/models/favoritesModels/changeFavoritesModel.dart';
+import 'package:shopmart/models/profileModels/logOutModel.dart';
 import 'package:shopmart/models/profileModels/userModel.dart';
 
 abstract class ShopStates {}
@@ -24,6 +25,24 @@ class LoginSuccessState extends ShopStates{
 }
 class LoginErrorState extends ShopStates{}
 ///End of Login State
+
+//FCM State
+class FCMLoadingState extends ShopStates{}
+class FCMSuccessState extends ShopStates{
+  final LogOutModel loginUserModel;
+  FCMSuccessState(this.loginUserModel);
+}
+class FCMErrorState extends ShopStates{}
+///End of FCM State
+
+///LogOut State
+class LogOutLoadingState extends ShopStates{}
+class LogOutSuccessState extends ShopStates{
+  final LogOutModel logOutUserModel;
+  LogOutSuccessState(this.logOutUserModel);
+}
+class LogOutErrorState extends ShopStates{}
+///End of LogOut State
 
 ///SignUp State
 class SignUpLoadingState extends ShopStates{}
@@ -160,5 +179,12 @@ class UpdateProfileSuccessState extends ShopStates {
 class UpdateProfileErrorState extends ShopStates{}
 ///End of Update Profile State
 
-
+///ChangePassword State
+class ChangePassLoadingState extends ShopStates{}
+class ChangePassSuccessState extends ShopStates {
+  final UserModel passUserModel;
+  ChangePassSuccessState(this.passUserModel);
+}
+class ChangePassErrorState extends ShopStates{}
+///End of ChangePassword State
 

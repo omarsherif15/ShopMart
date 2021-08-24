@@ -10,7 +10,6 @@ class AppCubit extends Cubit<ShopStates>{
   static AppCubit get(context) => BlocProvider.of(context);
 
   bool isDark = false;
-  IconData? icon = Icons.brightness_4_outlined;
   ThemeMode appMode = ThemeMode.light;
 
   void changeMode({fromCache}) {
@@ -18,18 +17,12 @@ class AppCubit extends Cubit<ShopStates>{
       isDark =!isDark;
     else
       isDark = fromCache;
+    emit(ChangeModeState());
     CacheHelper.saveData(key: 'isDark', value: isDark).then((value) {
       if(isDark)
-      {
-        icon = Icons.brightness_7;
         appMode = ThemeMode.dark;
-      }
       else
-      {
-        icon = Icons.brightness_4_outlined;
         appMode = ThemeMode.light;
-      }
-
       emit(ChangeModeState());
     });
 

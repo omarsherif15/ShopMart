@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopmart/cubit/states.dart';
+import 'package:shopmart/models/profileModels/logOutModel.dart';
 import 'package:shopmart/models/profileModels/userModel.dart';
 import 'package:shopmart/remoteNetwork/dioHelper.dart';
 import 'package:shopmart/remoteNetwork/endPoints.dart';
@@ -32,6 +33,24 @@ class LoginCubit extends Cubit<ShopStates> {
       emit(LoginErrorState());
     });
   }
+  // LogOutModel? fcmTokenModel;
+  // void setFCM_Token(){
+  //   emit(FCMLoadingState());
+  //   DioHelper.postData(
+  //       url: 'fcm-token',
+  //       token: token,
+  //       data:
+  //       {
+  //        "token" : token
+  //       }).then((value) {
+  //     fcmTokenModel = LogOutModel.fromJson(value.data);
+  //     emit(FCMSuccessState(fcmTokenModel!));
+  //   }).catchError((error) {
+  //     print(error.toString());
+  //     emit(FCMErrorState());
+  //   });
+  // }
+
 
   bool showPassword = false;
   IconData suffixIcon = Icons.visibility;

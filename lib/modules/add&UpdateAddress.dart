@@ -89,6 +89,7 @@ class UpdateAddressScreen extends StatelessWidget {
                         Text('Name',style: TextStyle(fontSize: 15),),
                         TextFormField(
                             controller: nameControl,
+                            textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter your Location name',
                               hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
@@ -103,6 +104,7 @@ class UpdateAddressScreen extends StatelessWidget {
                         Text('City',style: TextStyle(fontSize: 15),),
                         TextFormField(
                             controller: cityControl,
+                            textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter your City name',
                               hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
@@ -117,6 +119,7 @@ class UpdateAddressScreen extends StatelessWidget {
                         Text('Region',style: TextStyle(fontSize: 15),),
                         TextFormField(
                             controller: regionControl,
+                            textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter your region',
                               hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
@@ -131,6 +134,7 @@ class UpdateAddressScreen extends StatelessWidget {
                         Text('Details',style: TextStyle(fontSize: 15),),
                         TextFormField(
                             controller: detailsControl,
+                            textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter some details',
                               hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
@@ -145,6 +149,7 @@ class UpdateAddressScreen extends StatelessWidget {
                         Text('Notes',style: TextStyle(fontSize: 15),),
                         TextFormField(
                              controller: notesControl,
+                             textCapitalization: TextCapitalization.words,
                              decoration: InputDecoration(
                               hintText : 'Please add some notes to help find you',
                                hintStyle: TextStyle(color: Colors.grey,fontSize: 15),

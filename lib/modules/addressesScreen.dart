@@ -36,14 +36,27 @@ class AddressesScreen extends StatelessWidget {
                         navigateTo(context, SearchScreen(ShopCubit.get(context)));
                       },
                       icon: Icon(Icons.search)),
-
-
                 ],
               ),
+            bottomSheet: Container(
+              width: double.infinity,
+              height: 70,
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 10 ,horizontal: 15),
+              child: MaterialButton(
+                onPressed: (){
+                  navigateTo(context, UpdateAddressScreen(isEdit: false,));
+                },
+                color: Colors.deepOrange,
+                //shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                child: Text('ADD A NEW ADDRESS',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
+              ),
+            ),
             body: Stack(
               alignment: AlignmentDirectional.bottomCenter,
               children: [
                 SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       ListView.separated(
@@ -59,20 +72,20 @@ class AddressesScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                                  width: double.infinity,
-                                  height: 70,
-                                  color: Colors.white,
-                                  padding: EdgeInsets.symmetric(vertical: 10 ,horizontal: 15),
-                                  child: MaterialButton(
-                                    onPressed: (){
-                                      navigateTo(context, UpdateAddressScreen(isEdit: false,));
-                                    },
-                                    color: Colors.deepOrange,
-                                    //shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                                    child: Text('Add Address',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,letterSpacing: 2),),
-                                  ),
-                                )
+                // Container(
+                //   width: double.infinity,
+                //   height: 70,
+                //   color: Colors.white,
+                //   padding: EdgeInsets.symmetric(vertical: 10 ,horizontal: 15),
+                //   child: MaterialButton(
+                //     onPressed: (){
+                //       navigateTo(context, UpdateAddressScreen(isEdit: false,));
+                //       },
+                //     color: Colors.deepOrange,
+                //     //shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                //     child: Text('ADD A NEW ADDRESS',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
+                //   ),
+                // )
               ],
             ),
           );

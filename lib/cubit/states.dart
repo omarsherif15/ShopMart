@@ -1,4 +1,5 @@
 import 'package:shopmart/models/addressModels/addAddressModel.dart';
+import 'package:shopmart/models/addressModels/update&Delete.dart';
 import 'package:shopmart/models/cartModels/addCartModel.dart';
 import 'package:shopmart/models/favoritesModels/changeFavoritesModel.dart';
 import 'package:shopmart/models/profileModels/logOutModel.dart';
@@ -141,8 +142,10 @@ class AddAddressErrorState extends ShopStates{}
 
 ///Add Update Address State
 class UpdateAddressLoadingState extends ShopStates{}
-class UpdateAddressSuccessState extends ShopStates {}
-class UpdateAddressErrorState extends ShopStates{}
+class UpdateAddressSuccessState extends ShopStates {
+  final UpdateAddressModel updateAddressModel;
+  UpdateAddressSuccessState(this.updateAddressModel);
+}class UpdateAddressErrorState extends ShopStates{}
 ///End of Add Address State
 
 ///Add Delete Address State

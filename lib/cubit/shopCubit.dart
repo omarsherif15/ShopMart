@@ -285,7 +285,6 @@ class ShopCubit extends Cubit<ShopStates>
       print(error.toString());
     });
   }
-
   late CartModel  cartModel;
   void getCartData() {
     emit(CartLoadingState());
@@ -294,7 +293,6 @@ class ShopCubit extends Cubit<ShopStates>
         token: token,
     ).then((value){
       cartModel = CartModel.fromJson(value.data);
-      cartLength = cartModel.data!.cartItems.length;
       print('Get Cart '+ cartModel.status.toString());
       emit(CartSuccessState());
     }).catchError((error){
@@ -370,7 +368,7 @@ class ShopCubit extends Cubit<ShopStates>
     double longitude = 31.3260088,
   }){
     emit(UpdateAddressLoadingState());
-    DioHelper.postData(
+    DioHelper.putData(
         url: 'addresses/$addressId',
         token: token,
         data: {
@@ -384,10 +382,10 @@ class ShopCubit extends Cubit<ShopStates>
         }
     ).then((value){
       updateAddressModel = UpdateAddressModel.fromJson(value.data);
-      print('Update Address '+ addAddressModel!.status.toString());
+      print('Update Address '+ updateAddressModel!.status.toString());
       if(updateAddressModel!.status)
         getAddresses();
-      emit(UpdateAddressSuccessState());
+      emit(UpdateAddressSuccessState(updateAddressModel!));
     }).catchError((error){
       emit(UpdateAddressErrorState());
       print(error.toString());
@@ -429,8 +427,6 @@ class ShopCubit extends Cubit<ShopStates>
     });
   }
 
-
-  //static int cartLength = 0;
   Icon favoriteIcon =Icon (Icons.favorite,color: Colors.red,);
   Icon unFavoriteIcon =Icon (Icons.favorite_border_rounded);
 
@@ -453,15 +449,9 @@ class ShopCubit extends Cubit<ShopStates>
             alignment: AlignmentDirectional.topEnd,
             children: [
               Icon(Icons.shopping_cart_outlined),
-              if(cartLength != 0)
-                Stack(
-                  fit: StackFit.passthrough,
-                alignment: AlignmentDirectional.center,
-                children: [
-                  CircleAvatar(backgroundColor: Colors.green,radius: 6,),
-                  Text('$cartLength',style: TextStyle(fontSize: 10),),
-                ],
-              ),
+              if(cartLength!= 0)
+                CircleAvatar(backgroundColor: Colors.green,radius: 6,
+                child:Text('$cartLength',style: TextStyle(fontSize: 10,color: Colors.white),),),
             ],
           ),
           label: 'Cart',

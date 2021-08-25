@@ -55,6 +55,7 @@ var signUpFormKey = GlobalKey<FormState>();
             body: Padding(
               padding: const EdgeInsets.all(15),
               child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Form(
                   key: signUpFormKey,
                   child: Container(

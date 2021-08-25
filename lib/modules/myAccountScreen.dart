@@ -33,6 +33,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         ShopCubit cubit =  ShopCubit.get(context);
         bool value = false;
         return SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Container(
             color: Colors.grey[300],
             child: Column(

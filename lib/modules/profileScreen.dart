@@ -40,6 +40,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Container(
               color: Colors.grey[300],
               child: Column(

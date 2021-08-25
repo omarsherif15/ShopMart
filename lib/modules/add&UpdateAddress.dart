@@ -38,7 +38,15 @@ class UpdateAddressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit,ShopStates>(
-        listener: (context,state) {},
+        listener: (context,state) {
+          if (state is UpdateAddressSuccessState){
+            if (state.updateAddressModel.status)
+              pop(context);
+          }
+          else if (state is AddAddressSuccessState)
+            if(state.addAddressModel.status)
+              pop(context);
+        },
       builder: (context,state) {
           if(isEdit) {
           nameControl.text = name!;
@@ -50,20 +58,21 @@ class UpdateAddressScreen extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
               titleSpacing: 0,
+              automaticallyImplyLeading: false,
               title: Row(
                 children: [
                   Image(image: AssetImage('assets/images/ShopLogo.png'),width: 50, height: 50,),
                   Text('ShopMart'),
                 ],
               ),
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      navigateTo(context, SearchScreen(ShopCubit.get(context)));
-                    },
-                    icon: Icon(Icons.search)),
-
-
+              actions:
+              [
+                TextButton(
+                  onPressed: (){
+                    pop(context);
+                  },
+                  child: Text('CANCEL',style: TextStyle(color: Colors.grey),),
+                ),
               ],
             ),
             body: Padding(
@@ -76,14 +85,14 @@ class UpdateAddressScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children :
                       [
-                        if(state is AddAddressLoadingState)
+                        if(state is AddAddressLoadingState || state is UpdateAddressLoadingState)
                           Column(
                             children: [
                               LinearProgressIndicator(),
                               SizedBox(height: 20,),
                             ],
                           ),
-                        Text('Location Information',style: TextStyle(fontSize: 17),),
+                        Text('LOCATION INFORMATION',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                         SizedBox(height: 30,),
 
                         Text('Name',style: TextStyle(fontSize: 15),),
@@ -92,7 +101,7 @@ class UpdateAddressScreen extends StatelessWidget {
                             textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter your Location name',
-                              hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
+                              hintStyle: TextStyle(color: Colors.grey,fontSize: 17),
                               border: UnderlineInputBorder(),
                             ),
                             validator: (value){
@@ -107,7 +116,7 @@ class UpdateAddressScreen extends StatelessWidget {
                             textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter your City name',
-                              hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
+                              hintStyle: TextStyle(color: Colors.grey,fontSize: 17),
                               border: UnderlineInputBorder(),
                             ),
                             validator: (value){
@@ -122,7 +131,7 @@ class UpdateAddressScreen extends StatelessWidget {
                             textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter your region',
-                              hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
+                              hintStyle: TextStyle(color: Colors.grey,fontSize: 17),
                               border: UnderlineInputBorder(),
                             ),
                             validator: (value){
@@ -137,7 +146,7 @@ class UpdateAddressScreen extends StatelessWidget {
                             textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               hintText : 'Please enter some details',
-                              hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
+                              hintStyle: TextStyle(color: Colors.grey,fontSize: 17),
                               border: UnderlineInputBorder(),
                             ),
                             validator: (value){
@@ -152,7 +161,7 @@ class UpdateAddressScreen extends StatelessWidget {
                              textCapitalization: TextCapitalization.words,
                              decoration: InputDecoration(
                               hintText : 'Please add some notes to help find you',
-                               hintStyle: TextStyle(color: Colors.grey,fontSize: 15),
+                               hintStyle: TextStyle(color: Colors.grey,fontSize: 17),
                                border: UnderlineInputBorder(),
                              ),
                             validator: (value){
@@ -160,7 +169,7 @@ class UpdateAddressScreen extends StatelessWidget {
                                 return 'This field cant be Empty';
                             }
                         ),
-                        SizedBox(height: 40,),
+                        SizedBox(height:60 ,),
                         Container(
                           height: 50,
                           width: double.infinity,
@@ -177,10 +186,6 @@ class UpdateAddressScreen extends StatelessWidget {
                                           region: regionControl.text,
                                           details: detailsControl.text,
                                           notes: notesControl.text);
-                                      if (state is AddAddressSuccessState) {
-                                        if (state.addAddressModel.status)
-                                          navigateTo(context, AddressesScreen());
-                                      }
                                     }
                                   else {
                                   ShopCubit.get(context).addAddress(
@@ -189,10 +194,6 @@ class UpdateAddressScreen extends StatelessWidget {
                                       region: regionControl.text,
                                       details: detailsControl.text,
                                       notes: notesControl.text);
-                                  if (state is AddAddressSuccessState) {
-                                    if (state.addAddressModel.status)
-                                      navigateTo(context, AddressesScreen());
-                                  }
                                 }
                               }
                               },

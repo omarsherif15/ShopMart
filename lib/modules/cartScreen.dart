@@ -27,76 +27,61 @@ class CartScreen extends StatelessWidget {
                 Text('Be Sure to fill your cart with something you like',style: TextStyle(fontSize: 15 ))
               ],
             ),
-          ) :Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            children: [
-              SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    ListView.separated(
-                      physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder:(context,index) => cartProducts(ShopCubit.get(context).cartModel.data!.cartItems[index],context),
-                        separatorBuilder:(context,index) =>myDivider(),
-                        itemCount: ShopCubit.get(context).cartModel.data!.cartItems.length
-                    ),
-                    Container(
-                      color: Colors.grey[200],
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        children:
-                        [
-                          Row(
-                            children: [
-                              Text('Subtotal'+'(${cartModel.data!.cartItems.length} Items)',style: TextStyle(color: Colors.grey)),
-                              Spacer(),
-                              Text('EGP '+'${cartModel.data!.subTotal}',style: TextStyle(color: Colors.grey))
-                            ],
-                          ),
-                          SizedBox(height: 15,),
-                          Row(
-                            children: [
-                              Text('Shipping Fee'),
-                              Spacer(),
-                              Text('Free',style: TextStyle(color: Colors.green),)
-                            ],
-                          ),
-                          SizedBox(height: 20,),
-                          Row(
-                            textBaseline: TextBaseline.alphabetic,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            children: [
-                              Text('TOTAL',style: TextStyle(fontWeight: FontWeight.bold)),
-                              Text(' Inclusive of VAT',style: TextStyle(fontSize: 10,color: Colors.grey,fontStyle: FontStyle.italic),),
-                              Spacer(),
-                              Text('EGP '+'${cartModel.data!.total}',style: TextStyle(fontWeight: FontWeight.bold))
-                            ],
-                          ),
-
+          )
+              :SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                ListView.separated(
+                  physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder:(context,index) => cartProducts(ShopCubit.get(context).cartModel.data!.cartItems[index],context),
+                    separatorBuilder:(context,index) =>myDivider(),
+                    itemCount: cartLength
+                ),
+                Container(
+                  color: Colors.grey[200],
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    children:
+                    [
+                      Row(
+                        children: [
+                          Text('Subtotal'+'($cartLength Items)',style: TextStyle(color: Colors.grey)),
+                          Spacer(),
+                          Text('EGP '+'${cartModel.data!.subTotal}',style: TextStyle(color: Colors.grey))
                         ],
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      color: Colors.white,),
+                      SizedBox(height: 15,),
+                      Row(
+                        children: [
+                          Text('Shipping Fee'),
+                          Spacer(),
+                          Text('Free',style: TextStyle(color: Colors.green),)
+                        ],
+                      ),
+                      SizedBox(height: 20,),
+                      Row(
+                        textBaseline: TextBaseline.alphabetic,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        children: [
+                          Text('TOTAL',style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(' Inclusive of VAT',style: TextStyle(fontSize: 10,color: Colors.grey,fontStyle: FontStyle.italic),),
+                          Spacer(),
+                          Text('EGP '+'${cartModel.data!.total}',style: TextStyle(fontWeight: FontWeight.bold))
+                        ],
+                      ),
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 60,
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 10 ,horizontal: 15),
-                child: ElevatedButton(
-                  onPressed: (){},
-                  //shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                  child: Text('Check Out',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),),
-                ),
-              )
-            ],
+                Container(
+                  width: double.infinity,
+                  height: 60,
+                  color: Colors.white,),
+
+              ],
+            ),
           ) ;
         },
     );

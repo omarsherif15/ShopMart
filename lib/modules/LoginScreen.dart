@@ -57,7 +57,8 @@ class LoginScreen extends StatelessWidget {
                   child:
                   Form(
                     key: loginFormKey,
-                    child: SingleChildScrollView(
+                    child: SingleChildScrollView
+                      (physics: BouncingScrollPhysics(),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children:

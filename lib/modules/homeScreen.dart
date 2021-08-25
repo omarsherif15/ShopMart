@@ -22,6 +22,8 @@ class HomeScreen extends StatelessWidget {
     return BlocConsumer<ShopCubit,ShopStates>(
       listener: (context,state)
       {
+        if(state is HomeSuccessState)
+          cartLength = ShopCubit.get(context).cartModel.data!.cartItems.length;
         if(state is ChangeFavoritesSuccessState)
         {
             if (state.model.status == false)

@@ -12,8 +12,9 @@ import 'package:shopmart/shared/constants.dart';
 
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
-bool hidePassword  = true;
 var loginFormKey = GlobalKey<FormState>();
+bool hidePassword  = true;
+
 class LoginScreen extends StatelessWidget {
 
   get obscureText => null;

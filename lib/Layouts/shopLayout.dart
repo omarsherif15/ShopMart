@@ -27,8 +27,15 @@ class ShopLayout extends StatelessWidget {
             titleSpacing: 10,
             title: Row(
               children: [
-                Image(image: AssetImage('assets/images/ShopLogo.png'),width: 50, height: 50,),
-                Text('ShopMart'),
+                Image(image: AssetImage('assets/images/Shop Logo.jpeg'),width: 40, height: 40,),
+                RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(text: 'SHOP',style: TextStyle(color: Colors.red,fontSize: 25,fontWeight: FontWeight.bold)),
+                          TextSpan(text: 'MART',style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold)),
+                        ]
+                    )
+                ),
               ],
             ),
             actions: [

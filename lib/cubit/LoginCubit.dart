@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopmart/cubit/states.dart';
-import 'package:shopmart/models/profileModels/logOutModel.dart';
 import 'package:shopmart/models/profileModels/userModel.dart';
 import 'package:shopmart/remoteNetwork/dioHelper.dart';
 import 'package:shopmart/remoteNetwork/endPoints.dart';

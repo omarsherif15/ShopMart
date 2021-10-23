@@ -1,4 +1,5 @@
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:shopmart/cubit/shopCubit.dart';
 import 'package:shopmart/cubit/states.dart';
 import 'package:shopmart/modules/LoginScreen.dart';
 import 'package:shopmart/Layouts/shopLayout.dart';
+import 'package:shopmart/modules/splashScreen.dart';
 import 'package:shopmart/remoteNetwork/cacheHelper.dart';
 import 'package:shopmart/remoteNetwork/dioHelper.dart';
 import 'package:shopmart/shared/bloc_observer.dart';
@@ -68,7 +70,14 @@ class MyApp extends StatelessWidget {
           AppCubit cubit = AppCubit.get(context);
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: startWidget,
+              home: AnimatedSplashScreen(
+                  splash: SplashScreen(),
+                  nextScreen: startWidget,
+                splashIconSize: 700,
+                backgroundColor: Colors.white,
+                animationDuration: Duration(milliseconds: 2000),
+                splashTransition: SplashTransition.fadeTransition,
+              ),
               theme: lightMode(),
               darkTheme: darkMode(),
               themeMode: cubit.appMode,
